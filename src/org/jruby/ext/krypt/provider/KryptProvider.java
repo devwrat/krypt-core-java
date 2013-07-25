@@ -27,10 +27,32 @@
  */
 package org.jruby.ext.krypt.provider;
 
+import org.jruby.ext.krypt.provider;
 /**
  * 
  * @author <a href="mailto:Martin.Bosslet@gmail.com">Martin Bosslet</a>
  */
+
+public class KryptProvider{
+    public void initialize(){
+        NativeKryptProvider.initialize.invoke();
+    }
+    
+    public String getname(){
+        return NativeKryptProvider.name;
+    }
+    
+    public Digest newDigestByName(String name){
+        return NativeKryptProvider.NewDigestByName.invoke(name);
+    }
+    
+    public Digest newDigestByOid(String oid){
+        return NativeKryptProvider.NewDigestByName.invoke(oid);
+    }
+
+}
+/* Original Code */
+/*
 public interface KryptProvider {
     
     public String getName();
@@ -40,3 +62,4 @@ public interface KryptProvider {
     public Digest newDigestByOid(String oid);
     
 }
+*/
