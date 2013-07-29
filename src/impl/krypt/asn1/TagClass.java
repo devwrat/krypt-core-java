@@ -32,6 +32,11 @@ package impl.krypt.asn1;
  * 
  * @author <a href="mailto:Martin.Bosslet@gmail.com">Martin Bosslet</a>
  */
+
+
+/* The file contains code to handle tags. The thoery of tags is given in 12.1 of the book */
+
+
 public enum TagClass {
     
     UNIVERSAL       (Masks.UNIVERSAL_MASK),

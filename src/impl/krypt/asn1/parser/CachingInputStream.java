@@ -46,6 +46,10 @@ public class CachingInputStream extends FilterInputStream {
         super(in);
     }
 
+    /* Calls the overloaded read() function, which stuffs the next byte of input in baos output
+     * stream. Returns the actual value read normally (read != 1) or the number of bytes read
+     * in other cases.
+     */
     @Override
     public int read() throws IOException {
         int read =  read(singleByte, 0, 1);
@@ -54,6 +58,11 @@ public class CachingInputStream extends FilterInputStream {
         return (singleByte[0] & 0xff);
     }
 
+    /* The Super method reads len no. of bytes in b from offset off and returns the
+     * number of bytes read. Returns -1 if it is end of stream i.e no more data.
+     * Then those many bytes are written to the baos outputstream. Finally the number
+     * of bytes read from the inputstream is returned.
+     */
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         int read = super.read(b, off, len);

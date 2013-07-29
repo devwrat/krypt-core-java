@@ -37,6 +37,12 @@ import java.io.InputStream;
  * 
  * @author <a href="mailto:Martin.Bosslet@gmail.com">Martin Bosslet</a>
  */
+
+/* This file contains the code to handle DefiniteInputStream ie. reading from the stream either 1,
+ * or more bytes.
+ * Doubt: Why close() says: nothing to be done?
+ */
+
 class DefiniteInputStream extends FilterInputStream {
 
     private int read = 0;

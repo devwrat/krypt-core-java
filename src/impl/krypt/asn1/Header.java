@@ -36,6 +36,12 @@ import java.io.OutputStream;
  */
 public interface Header {
 
+    /* Doubt: 
+     * 0. What is Complex_mask??
+     * 1. Why constructed mask is 0x20. On pg 424 of book, the constructed mask is give
+     * as 1ttttt. Nothing has been mentioned about the 't's. They are assumed to be 0??
+     * Similary t is assumed to be 0 for constructed mask.
+     */
     public static final byte CONSTRUCTED_MASK     = (byte)0x20;
     public static final byte COMPLEX_TAG_MASK     = (byte)0x1f;
     public static final byte INFINITE_LENGTH_MASK = (byte)0x80;

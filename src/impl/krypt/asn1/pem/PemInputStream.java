@@ -43,6 +43,16 @@ import org.jruby.ext.krypt.Base64;
  * 
  * @author <a href="mailto:Martin.Bosslet@gmail.com">Martin Bosslet</a>
  */
+
+/* This file contains complete implementation of inputstream called as PemInputStream.
+ * It basically reads from a buffered reader.
+ * For each line read, it looks for either a Header, content or the footer.
+ * It also checks if the Header started was finished with a proper footer. (to check this,
+ * after the header there is space to name the current input. Similarly, after the footer,
+ * one can name the input)
+ */
+
+
 public class PemInputStream extends FilterInputStream {
 
     private Base64Buffer b64Buffer;
@@ -172,6 +182,7 @@ public class PemInputStream extends FilterInputStream {
             this.eof = false;
         }
         
+        /* Takes a line in Base64 format and then writes the decoded line to the output stream */
         private int decodeLine(String line, OutputStream out) throws IOException {
             try {
                 byte[] bytes = line.getBytes("US-ASCII");
@@ -182,6 +193,11 @@ public class PemInputStream extends FilterInputStream {
             }
         }
         
+        /* Keeps on reading the input from in(a bufferedreader). Checks and matches Header.
+         * The contents are decoded using decodeline() function (and thus written to outputsteram.
+         * Finally checks for valid footer.
+         * All the content is also copied to buffer and bufferposition is set to 0.         
+         */
         private void fill() throws IOException {
             int total = 0;
             ByteArrayOutputStream baos = new ByteArrayOutputStream(THRESHOLD);
@@ -248,6 +264,7 @@ public class PemInputStream extends FilterInputStream {
             bufpos = 0;
         }
         
+        /* Returns either len no. of bytes or all the available bytes in the buffer */
         private int consumeBytes(byte[] b, int off, int len) {
             if (bufpos == buffer.length)
                 return 0;

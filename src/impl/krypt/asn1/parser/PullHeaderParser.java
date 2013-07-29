@@ -44,7 +44,7 @@ import java.io.InputStream;
  * @author <a href="mailto:Martin.Bosslet@gmail.com">Martin Bosslet</a>
  */
 public class PullHeaderParser implements Parser {
-
+/* Doubt: Why these values for max_tag and lenght??  */
     private static final int MAX_TAG = Integer.MAX_VALUE >> 7;
     private static final int MAX_LENGTH = Integer.MAX_VALUE >> 8;
     
@@ -71,7 +71,7 @@ public class PullHeaderParser implements Parser {
         int read = nextInt(in);
         if (read == -1) 
             throw new ParseException("EOF reached.");
-        return (byte)read;
+        return (byte)reanextIntd;
     }
     
     private int nextInt(InputStream in) {
@@ -97,6 +97,11 @@ public class PullHeaderParser implements Parser {
     private Tag parsePrimitiveTag(byte b) {
         int tag = b & Header.COMPLEX_TAG_MASK;
         boolean isConstructed = matchMask(b, Header.CONSTRUCTED_MASK);
+        /* anding with PRIVATE is same as anding with 1's since PRIVATE is 11.
+         * Hence the line b&..getmask() practically returns the 2 highest (rightmost)
+         * bits of the header byte which then are detected by the of() function of
+         * Tagclass
+         */
         TagClass tc = TagClass.of((byte)(b & TagClass.PRIVATE.getMask()));
         return new Tag(tag, tc, isConstructed, new byte[] { b });
     }

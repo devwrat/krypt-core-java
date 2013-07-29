@@ -75,6 +75,14 @@ class ParsedHeaderImpl implements ParsedHeader {
 	getValue();
     }
 
+    /* If the input stream is already read into cachevalue, return it.
+     * Else, fetch new value from the inputstream and store it in cachedvalue.
+     * Return cachedvalue.
+     */
+    /* Doubt: cachedValue is never set to null again after the initial call.
+     * Hence, each time the same value will be returned, without any new inputs
+     * from the inputstream. Bug??
+     */
     @Override
     public byte[] getValue() {
 	if (cachedValue == null) {
@@ -104,6 +112,9 @@ class ParsedHeaderImpl implements ParsedHeader {
         }
     }
 
+    /* Doubt: if cachedValueStream is null, then && operator will give RunTimeError.
+     * Is this a bug in coding? 
+     */
     @Override
     public InputStream getValueStream(boolean valuesOnly) {
         if (consumed && cachedValueStream == null)
@@ -163,6 +174,7 @@ class ParsedHeaderImpl implements ParsedHeader {
         return new Asn1Object(h, getValue());
     }
     
+    /* Doubt: Why encodeTo does not write value i.e. actual data to the outputstream? */
     @Override
     public void encodeTo(OutputStream out) {
 	try {
