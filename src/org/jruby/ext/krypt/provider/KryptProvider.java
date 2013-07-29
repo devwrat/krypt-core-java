@@ -35,23 +35,23 @@
      */
 
     public class KryptProvider{
-        private NativeKryptProvider native_provider;
+        private NativeKryptProvider provider;
 
         KryptProvider(native_provider){
-            native_provider = new NativeKryptProvider(native_provider);
-            native_provider.init.invoke(native_provider, null);
+            provider = new NativeKryptProvider(native_provider);
+            provider.init.invoke(provider, null);
         }
 
         public String getname(){
-            return native_provider.name;
+            return provider.name;
         }
 
         public Digest newDigestByName(String name){
-            return native_provider.NewDigestByName.invoke(name);
+            return provider.NewDigestByName.invoke(name);
         }
 
         public Digest newDigestByOid(String oid){
-            return native_provider.NewDigestByName.invoke(oid);
+            return provider.NewDigestByName.invoke(oid);
         }
 
     }
