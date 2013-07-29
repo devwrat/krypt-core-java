@@ -27,7 +27,7 @@
      */
     package org.jruby.ext.krypt.provider;
 
-    import org.jruby.ext.krypt.provider.NativeKryptProvider;
+    import org.jruby.ext.krypt.provider.NativeKryptProvider.*;
 
     /**
      * 
