@@ -6,6 +6,8 @@ import com.sun.jna.Structure;
 
 import java.util.List;
 
+import org.jruby.ext.krypt.provider.KryptMd;
+
 public class NativeKryptProvider extends Structure
 {
     protected List getFieldOrder(){
@@ -28,13 +30,13 @@ public class NativeKryptProvider extends Structure
 
     public interface md_new_oid extends Callback
     {
-        Digest invoke(KryptProvider provider, String oid);
+        KryptMd invoke(KryptProvider provider, String oid);
         /* const keyword in the c declaration is ignored for now */
     }
 
     public interface md_new_name extends Callback
     {
-        Digest invoke(KryptProvider provider, String name);
+        KryptMd invoke(KryptProvider provider, String name);
         /* const keyword in the c declaration is ignored for now */
     }
    
