@@ -27,10 +27,78 @@
  */
 package org.jruby.ext.krypt.provider;
 
+import org.jruby.ext.krypt.provider.KryptMd;
+import org.jruby.ext.krypt.provider.ProviderInterface;
+import org.jruby.ext.krypt.provider.DigestInterface;
+        
+import com.sun.jna.Callback;
+import com.sun.jna.Pointer;
+
 /**
  * 
  * @author <a href="mailto:Martin.Bosslet@gmail.com">Martin Bosslet</a>
  */
+
+public class Digest{
+    
+    NativeHandle handle;
+    
+    Digest(ProviderInterface provider, String nameoroid){
+        /* write this in a try catch block */
+        this.handle = interface_for_name(provider, nameoroid);
+        
+        /* if error in above line */
+        this.handle = interface_for_oid(provider, nameoroid);
+    }
+    
+    public int reset(){
+        return handle.inter.reset(handle.container);
+    }
+    
+    public int update(byte[] data, int off, int len){
+        byte[] temp = new byte[len-off + 1];
+        int i;
+        for(i = off; i < off+len; i++)
+            temp[i-off] = data[i];
+        
+        return handle.inter.update(handle.container, temp, len);
+    }
+    
+    /* all the private methods and classes */
+    private class NativeHandle{
+        KryptMd container;
+        DigestInterface inter;
+        
+        NativeHandle(KryptMd container, DigestInterface inter){
+            this.container = container;
+            this.inter = inter;
+        }
+        
+    }
+    
+    private NativeHandle interface_for_name(ProviderInterface provider, String name){
+         KryptMd temp = provider.NewDigestByName.invoke(provider, name);
+         
+         KryptMd container = new KryptMd(temp);
+         DigestInterface inter = new DigestInterface(container.methods);
+         
+         return new NativeHandle(container, inter);
+         
+    }
+    
+    private NativeHandle interface_for_oid(ProviderInterface provider, String oid){
+        KryptMd temp = provider.NewDigestByOid.invoke(provider, oid);
+        KryptMd container = new KryptMd(temp);
+        DigestInterface inter = new DigestInterface(container.methods);
+         
+        return new NativeHandle(container, inter);
+         
+        
+    }
+}
+
+/* original code */
+/*
 public interface Digest {
     
     public void update(byte[] data, int off, int len);
@@ -42,4 +110,5 @@ public interface Digest {
     public int getBlockLength();
     
 }
+*/
 

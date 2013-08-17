@@ -27,7 +27,8 @@
      */
     package org.jruby.ext.krypt.provider;
 
-    import org.jruby.ext.krypt.provider.NativeKryptProvider.*;
+    import org.jruby.ext.krypt.provider.ProviderInterface;
+    import org.jruby.ext.krypt.provider.KryptMd;
 
     /**
      * 
@@ -35,23 +36,23 @@
      */
 
     public class KryptProvider{
-        private NativeKryptProvider provider;
+        private ProviderInterface provider;
 
         KryptProvider(native_provider){
-            provider = new NativeKryptProvider(native_provider);
-            provider.init.invoke(provider, null);
+            provider = new ProviderInterface(native_provider);
+            provider.initialize.invoke(provider, null);
         }
 
         public String getname(){
             return provider.name;
         }
 
-        public Digest newDigestByName(String name){
-            return provider.NewDigestByName.invoke(name);
+        public KryptMd newDigestByName(String name){
+            return provider.NewDigestByName.invoke(provider, name);
         }
 
-        public Digest newDigestByOid(String oid){
-            return provider.NewDigestByName.invoke(oid);
+        public KryptMd newDigestByOid(String oid){
+            return provider.NewDigestByName.invoke(provider, oid);
         }
 
     }
