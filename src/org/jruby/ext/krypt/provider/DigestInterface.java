@@ -3,6 +3,7 @@ package org.jruby.ext.krypt.provider;
 import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.ptr.PointerByReference;
 
 import java.util.List;
 import org.jruby.ext.krypt.provider.KryptMd;
@@ -26,11 +27,11 @@ public class DigestInterface extends Structure
     }
 
     public interface md_final extends Callback{
-        int invoke(KryptMd md, Pointer[] data, Pointer len);
+        int invoke(KryptMd md, PointerByReference data, Pointer len);
     }
 
     public interface md_digest extends Callback{
-        int invoke(KryptMd md, Pointer data, int len, Pointer[] digest, Pointer digest_length);
+        int invoke(KryptMd md, Pointer data, int len, PointerByReference digest, Pointer digest_length);
     }
 
     public interface md_digest_lenght extends Callback{

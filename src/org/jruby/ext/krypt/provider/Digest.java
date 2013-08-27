@@ -33,6 +33,9 @@ import org.jruby.ext.krypt.provider.DigestInterface;
         
 import com.sun.jna.Callback;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.Memory;
+import com.sun.jna.ptr.PointerByReference;
 
 /**
  * 
@@ -56,12 +59,57 @@ public class Digest{
     }
     
     public int update(byte[] data, int off, int len){
-        byte[] temp = new byte[len-off + 1];
+        byte[] temp = new byte[len-off];
         int i;
         for(i = off; i < off+len; i++)
             temp[i-off] = data[i];
         
         return handle.inter.update(handle.container, temp, len);
+    }
+    
+    public byte[] digest(){
+       Pointer d = new Memory(Pointer.SIZE);
+       PointerByReference digest_ptr = new PointerByReference(d);
+       IntByReference digest_len = new IntByReference();
+       
+       handle.inter.finalize(handle.container, digest_ptr, digest_len);
+       int size = digest_len.getValue();
+       d = digest_ptr.getValue();
+       return d.getByteArray(0, size);
+       
+    }
+    
+    public byte[] digest(byte [] data){
+        
+        Pointer d = new Memory(Pointer.SIZE);
+        PointerByReference digest_ptr = new PointerByReference();
+        IntByReference digest_len = new IntByReference();
+        
+        handle.inter.digestf.invoke(handle.container, data, data.length, digest_ptr, digest_len);
+        int size = digest_len.getValue();
+        d = digest_ptr.getValue();
+        return d.getByteArray(0, size);
+    }
+    
+    public String getname(){
+        PointerByReference name = new PointerByReference();
+        handle.inter.name.invoke(handle.container, name);
+        Pointer p = name.getValue();
+        return p.getString(0);
+    }
+    
+    public int getDigestLength(){
+        
+        IntByReference len = new IntByReference();
+        handle.inter.digest_length.invoke(handle.container, len);
+        return len.getValue();
+    }
+    
+    public int getBlockLength(){
+        IntByReference len = new IntByReference();
+        handle.inter.block_length.invoke(handle.container, len);
+        return len.getValue();
+        
     }
     
     /* all the private methods and classes */
