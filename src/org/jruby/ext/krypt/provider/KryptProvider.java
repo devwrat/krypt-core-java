@@ -38,7 +38,7 @@
     public class KryptProvider{
         private ProviderInterface provider;
 
-        KryptProvider(native_provider){
+        KryptProvider(ProviderInterface native_provider){
             provider = new ProviderInterface(native_provider);
             provider.initialize.invoke(provider, null);
         }
